@@ -16,7 +16,7 @@ authRouter.post("/api/signup", async (req, res) => {
             return res.status(400).json({ msg: "user with this email already exists" });
         } else {
             // Hash the password before saving the user
-            if(password.length < 8){
+            if (password.length < 8) {
                 return res.status(400).json({ msg: "Password must be at least 8 characters long" });
             }
             const salt = await bcrypt.genSalt(10);// Generate a salt for hashing
@@ -52,6 +52,21 @@ authRouter.post("/api/signin", async (req, res) => {
         }
     } catch (e) {
         res.status(500).json({ error: e.message });
+    }
+});
+
+authRouter.put('/api/users/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { state, city, locality } = req.body;
+        const updatedUser = await User.findByIdAndUpdate(id,
+            { state, city, locality }, { new: true });
+        if (!updatedUser) {
+            return res.status(404).json({ msg: "User not found" });
+        }
+        res.status(200).json(updatedUser );
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 });
 
