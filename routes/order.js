@@ -50,4 +50,31 @@ orderRouter.get('/api/orders/:buyerId', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+orderRouter.delete('/api/orders/:orderId', async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        const deletedOrder = await Order.findByIdAndDelete(orderId);
+        if (!deletedOrder) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+        res.status(200).json({ message: 'Order deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+orderRouter.get('/api/orders/vendors/:vendorId', async (req, res) => {
+    try {
+        const { vendorId } = req.params;
+        const orders = await Order.find({ vendorId });  
+        if (orders.length == 0) {
+            return res.status(404).json({ error: 'No orders found for this vendor' });
+        }
+        res.status(200).json(orders);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 module.exports = orderRouter;
