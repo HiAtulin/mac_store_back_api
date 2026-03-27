@@ -13,7 +13,7 @@ const orderSchema = mongoose.Schema({
     image: { type: String, required: true },
     buyerId: { type: String, required: true },
     vendorId: { type: String, required: true },
-    Processing: { type: Boolean, default: true },
+    processing: { type: Boolean, default: true },
     delivered: { type: Boolean, default: false },
     createdAt: {type: String, required: true},
 
